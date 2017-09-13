@@ -5,10 +5,11 @@ const mosca = require('mosca')
 const redis = require('redis')
 const chalk = require('chalk')
 const db = require('platziverse-db')
+
 const { parsePayload } = require('./utils')
 
 const backend = {
-  type: redis,
+  type: 'redis',
   redis,
   return_buffers: true
 }
@@ -51,7 +52,7 @@ server.on('clientDisconnected', async (client) => {
       return handleError(e)
     }
 
-    // Delete Agent from Client List
+    // Delete Agent from Clients List
     clients.delete(client.id)
 
     server.publish({
@@ -62,13 +63,12 @@ server.on('clientDisconnected', async (client) => {
         }
       })
     })
-
     debug(`Client (${client.id}) associated to Agent (${agent.uuid}) marked as disconnected`)
   }
 })
 
 server.on('published', async (packet, client) => {
-  debug(`Recieved: ${packet.topic}`)
+  debug(`Received: ${packet.topic}`)
 
   switch (packet.topic) {
     case 'agent/connected':
@@ -79,12 +79,11 @@ server.on('published', async (packet, client) => {
       debug(`Payload: ${packet.payload}`)
 
       const payload = parsePayload(packet.payload)
-
+      
       if (payload) {
         payload.agent.connected = true
 
         let agent
-
         try {
           agent = await Agent.createOrUpdate(payload.agent)
         } catch (e) {
@@ -97,7 +96,7 @@ server.on('published', async (packet, client) => {
         if (!clients.get(client.id)) {
           clients.set(client.id, agent)
           server.publish({
-            type: 'agent/connected',
+            topic: 'agent/connected',
             payload: JSON.stringify({
               agent: {
                 uuid: agent.uuid,
@@ -112,19 +111,17 @@ server.on('published', async (packet, client) => {
 
         // Store Metrics
         for (let metric of payload.metrics) {
-          let m 
+          let m
 
           try {
             m = await Metric.create(agent.uuid, metric)
-
           } catch (e) {
             return handleError(e)
           }
 
-          debug(`Metric ${m.id} save on agent ${agent.metric}`)
+          debug(`Metric ${m.id} saved on agent ${agent.uuid}`)
         }
       }
-
       break
   }
 })

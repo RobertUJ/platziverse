@@ -24,9 +24,6 @@ module.exports = async function (config) {
   const AgentModel = setupAgentModel(config)
   const MetricModel = setupMetricModel(config)
 
-  const Agent = setupAgent(AgentModel)
-  const Metric = setupMetric(MetricModel, AgentModel)
-
   AgentModel.hasMany(MetricModel)
   MetricModel.belongsTo(AgentModel)
 
@@ -35,6 +32,9 @@ module.exports = async function (config) {
   if (config.setup) {
     await sequelize.sync({ force: true })
   }
+
+  const Agent = setupAgent(AgentModel)
+  const Metric = setupMetric(MetricModel, AgentModel)
 
   return {
     Agent,
