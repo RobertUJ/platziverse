@@ -6,7 +6,7 @@ const redis = require('redis')
 const chalk = require('chalk')
 const db = require('platziverse-db')
 
-const { parsePayload } = require('./utils')
+const { parsePayload } = require('platziverse-utils')
 
 const backend = {
   type: 'redis',

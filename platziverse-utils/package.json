@@ -1,0 +1,22 @@
+{
+  "name": "platziverse-utils",
+  "version": "1.0.0",
+  "description": "A Simple Utils to IoT Platfor",
+  "main": "index.js",
+  "scripts": {
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hecto932/platziverse.git"
+  },
+  "author": "Hector Flores <hecto932@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hecto932/platziverse/issues"
+  },
+  "homepage": "https://github.com/hecto932/platziverse#readme",
+  "devDependencies": {
+    "standard": "^10.0.3"
+  }
+}

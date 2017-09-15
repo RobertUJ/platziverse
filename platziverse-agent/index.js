@@ -6,7 +6,7 @@ const defaults = require('defaults')
 const EventEmitter = require('events')
 const uuid = require('uuid')
 
-const { parsePayload } = require('./utils')
+const { parsePayload } = require('platziverse-utils')
 
 const options = {
   name: 'untitled',
